@@ -145,6 +145,25 @@ end
 
 ```
 
+The last error to fix is that the tasks get duplicated on each update.
+Guide the students to debug the error by:
+- inspecting the generated HTML for the new task input fields on `projects/edit.html.erb`
+- use `binding.pry` on `projects#update` and compare `params` with `project_params`
+- note the unpermitted id's
+
+The fix is to add `:id` to permitted `tasks_attributes:`
+```ruby
+# projects_controller.rb
+ def project_params
+    params.require(:project).permit(:name, :due_date, tasks_attributes: [
+    :name,
+    :complete,
+    :id
+    ])
+end
+```
+
+
 Note: Someone will probably ask how to I make more tasks for a project or have that number be variable
 
 You COULD use url parameters to change how many forms, but the best way to do it is JS
